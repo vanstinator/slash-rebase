@@ -5,10 +5,10 @@ module.exports = app => {
   // Type `/label foo, bar` in a comment box for an Issue or Pull Request
   commands(app, 'rebase', (context, command) => {
     // const labels = command.arguments.split(/, */)
-    console.log(context)
-    const params = context.issue({body: 'Rebased this branch successfully!'})
+    console.log(context.payload.comment);
+    const params = context.issue({ comment_id: context.payload.comment.id, body: context.payload.comment.body, reaction: '+1'})
 
     // Post a comment on the issue
-    return context.github.issues.createComment(params)
+    return context.github.issues.updateComment(params)
   })
 }
