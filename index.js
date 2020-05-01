@@ -1,5 +1,11 @@
 const commands = require("probot-commands");
-const git = require('simple-git/promise');
+const git = require("simple-git/promise");
+
+const USER = "vanstinator";
+const PASS = process.env.GITHUB_TOKEN;
+const REPO = "github.com/vanstinator/bot-test";
+
+const remote = `https://${USER}:${PASS}@${REPO}`;
 
 module.exports = app => {
   console.log("App loaded");
@@ -7,12 +13,19 @@ module.exports = app => {
   commands(app, "rebase", async (context, command) => {
     // const labels = command.arguments.split(/, */)
     const params = context.issue({ body: "Rebased this branch successfully!" });
-    
-    console.log(context.github)
-    
+
+    console.log(context.github);
+
     // Start doing stuff
-    await git.clonse(`https://github.com/vanstinator/bot-test`)
-    
+    try {
+      await git()
+        .silent(true)
+        .clone(remote)
+        .checkout('develop');
+    } catch (e) {
+      console.error(`Failed to clone ${remote}`);
+    }
+
     // Post a comment on the issue
     return context.github.issues.createComment(params);
   });
