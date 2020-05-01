@@ -2,10 +2,10 @@
   "//1": "describes your app and its dependencies",
   "//2": "https://docs.npmjs.com/files/package.json",
   "//3": "updating this file will download and update your packages",
-  "name": "your-bot-name",
+  "name": "/rebase",
   "version": "1.0.0",
-  "description": "",
-  "author": "github-username <email-address>",
+  "description": "A simple /rebase command for GitHub Pull Requests",
+  "author": "vanstinator <justinvdhooft@gmail.com>",
   "license": "ISC",
   "repository": "https://github.com/probot/hello-world.git",
   "scripts": {
@@ -14,7 +14,7 @@
     "test": "jest && standard"
   },
   "dependencies": {
-    "probot": "^9.0.0",
+    "probot": "^9.11.3",
     "probot-commands": "^1.1.0"
   },
   "devDependencies": {
