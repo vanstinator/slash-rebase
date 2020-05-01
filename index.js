@@ -1,4 +1,5 @@
 const commands = require("probot-commands");
+const git = require('simple-git/promise');
 
 module.exports = app => {
   console.log("App loaded");
@@ -9,11 +10,9 @@ module.exports = app => {
     
     console.log(context.github)
     
-    const git_token = await context.github.actions.getSecret({
-      owner: "vanstinator",
-      repo: "bot-test",
-      name: "git-token"
-    });
+    // Start doing stuff
+    await git.clonse(`https://github.com/vanstinator/bot-test`)
+    
     // Post a comment on the issue
     return context.github.issues.createComment(params);
   });

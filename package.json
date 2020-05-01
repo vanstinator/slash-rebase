@@ -2,7 +2,7 @@
   "//1": "describes your app and its dependencies",
   "//2": "https://docs.npmjs.com/files/package.json",
   "//3": "updating this file will download and update your packages",
-  "name": "/rebase",
+  "name": "slash-rebase",
   "version": "1.0.0",
   "description": "A simple /rebase command for GitHub Pull Requests",
   "author": "vanstinator <justinvdhooft@gmail.com>",
