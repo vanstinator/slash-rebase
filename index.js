@@ -1,5 +1,5 @@
 const commands = require("probot-commands");
-const git = require("simple-git/promise");
+const git = require("simple-git/promise")('/tmp');
 
 const USER = "vanstinator";
 const PASS = process.env.GITHUB_TOKEN;
@@ -14,19 +14,20 @@ module.exports = app => {
     // const labels = command.arguments.split(/, */)
     const params = context.issue({ body: "Rebased this branch successfully!" });
 
-    console.log(context.github);
-
+    const comment = { ...params, issue_number: params.number };
+    delete comment.number;
+    
     // Start doing stuff
-    try {
-      await git()
-        .silent(true)
-        .clone(remote)
-        .checkout('develop');
-    } catch (e) {
-      console.error(`Failed to clone ${remote}`);
-    }
+    // try {
+    //   await git()
+    //     .silent(true)
+    //     .clone(remote)
+    //     .checkout('develop');
+    // } catch (e) {
+    //   console.error(`Failed to clone ${remote}`);
+    // }
 
     // Post a comment on the issue
-    return context.github.issues.createComment(params);
+    return context.github.issues.createComment(comment);
   });
 };
