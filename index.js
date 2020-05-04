@@ -36,7 +36,7 @@ module.exports = app => {
     }
     
     // checkout the PR branch
-    console.log(JSON.stringify(context.payload, null, 2))
+    console.log(JSON.stringify(context.payload, null, 2));
     
     // rebase on develop
     

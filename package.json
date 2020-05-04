@@ -14,6 +14,7 @@
     "test": "jest && standard"
   },
   "dependencies": {
+    "got": "^11.1.0",
     "probot": "^9.11.3",
     "probot-commands": "^1.1.0",
     "simple-git": "^2.2.0"
