@@ -7,7 +7,7 @@ services:
       context: .
     ports:
       - 3000:3000
-    command: "npm run start"
+    command: "npm run dev"
     env_file:
       - .env
     volumes:

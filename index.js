@@ -27,13 +27,12 @@ module.exports = enqueue(app => {
   commands(app, "rebase", async (context, command) => {
 
     const remote = `https://${process.env.GITHUB_USER}:${process.env.GITHUB_TOKEN}@github.com/${context.payload.repository.full_name}`;
-
-    const params = context.issue({ body: "🎉 Rebase Complete!" });
     
     // TODO: HAAACK There's some breaking octokit changes in the pipe. Will be resolved in probot v10 
+    const params = context.issue();
     const comment = { ...params, issue_number: params.number };
     delete comment.number;
-       
+
     const response = await got(context.payload.issue.pull_request.url, gotOpts).json();
 
     const head = response.head.ref;
@@ -50,8 +49,10 @@ module.exports = enqueue(app => {
       } else if (err.code === 1) {
         comment.body = "😄 Nothing to do!"
       }
+
+      return context.github.issues.createComment(comment);
     };
 
-    return context.github.issues.createComment(comment);
+    return context.github.reactions.createForIssueComment({ ...comment, comment_id: context.payload.comment.id, content: 'hooray' });
   });
 });
