@@ -4,7 +4,7 @@ ARG PORT=3000
 
 ARG NODE_ENV=production
 
-ENV PORT=$PORT NODE_ENV=$NODE_ENV
+ENV PORT=$PORT NODE_ENV=$NODE_ENV PATH=/app/node_modules/.bin:$PATH
 EXPOSE $PORT
 
 # git - supporting git operations
