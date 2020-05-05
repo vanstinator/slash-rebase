@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  web:
+    build:
+      args:
+        - NODE_ENV=debug
+      context: .
+    ports:
+      - 3000:3000
+    command: "npm run start"
+    env_file:
+      - .env
+    volumes:
+      - .:/app/src
+      - /app/src/node_modules

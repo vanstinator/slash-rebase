@@ -1,19 +1,21 @@
-FROM 14.1.0-alpine3.10
+FROM node:12.16.3-alpine3.9
+
+ARG PORT=3000
 
 ARG NODE_ENV=production
 
-ENV NODE_ENV=$NODE_ENV
-EXPOSE 3000
+ENV PORT=$PORT NODE_ENV=$NODE_ENV
+EXPOSE $PORT
 
-# git - supporting git options
-RUN apk update && apk add --no-cache git
+# git - supporting git operations
+RUN apk update && apk add --no-cache git && apk add --no-cache bash
 
 WORKDIR /app
 COPY package-lock.json package.json ./
-# yarn-cache-install.sh is available from the production-cloud image
-RUN npm run install
+
+RUN npm install
 
 WORKDIR /app/src
 COPY . ./
 
-RUN npm run start
+CMD npm run start

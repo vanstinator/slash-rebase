@@ -1,26 +1,33 @@
 #!/bin/bash
 
-while getopts ":u:h:b:" opt; do
+while getopts ":r:h:b:n:e:" opt; do
   case $opt in
-    u) url="$OPTARG"
+    r) remote="$OPTARG"
     ;;
     h) head="$OPTARG"
     ;;
     b) base="$OPTARG"
+    ;;
+    n) name="$OPTARG"
+    ;;
+    e) email="$OPTARG"
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
   esac
 done
 
-repo=${url##*/}
+repo=${remote##*/}
 
-mkdir /tmp || echo "tmp already exists"
-cd /tmp
+mkdir tmp || echo "tmp already exists"
+cd tmp
 
-git clone $url
+git clone $remote
 
 cd $repo
+
+git config user.name $name
+git config user.email $email
 
 git fetch
 
