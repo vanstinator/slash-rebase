@@ -10,6 +10,8 @@ You can run this wherever. The code is repo agnostic. But you'll need a github u
 Set the following env vars
 
 ```
+GITHUB_FULL_NAME
+GITHUB_EMAIL
 GITHUB_USER
 GITHUB_PASSWORD
 ```
