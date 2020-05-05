@@ -1,10 +1,19 @@
 const commands = require("probot-commands");
 const got = require("got");
 const util = require('util');
+const enqueue = require('enqueue');
 
 const exec = util.promisify(require('child_process').exec);
 
 require('dotenv').config()
+
+// These are the defaults already. But lets specify them anyway.
+const enqueueOpts = {
+  concurrency: 1,
+
+  // TODO this might be crazy. Will need to monitor memory on the server
+  limit: Infinity
+};
 
 const gotOpts =  { 
   username: process.env.GITHUB_USER,
@@ -13,7 +22,7 @@ const gotOpts =  {
   resolveBodyOnly: true
 };
 
-module.exports = app => {
+module.exports = enqueue(app => {
   console.log("App loaded");
   commands(app, "rebase", async (context, command) => {
 
@@ -45,4 +54,4 @@ module.exports = app => {
 
     return context.github.issues.createComment(comment);
   });
-};
+});

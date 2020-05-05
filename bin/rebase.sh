@@ -52,4 +52,5 @@ else
     git rebase --abort
 fi
 
+# Explictly fail unless otherwise directed. Catch-all for unforseen errors
 exit 2
