@@ -45,9 +45,9 @@ module.exports = enqueue(app => {
     } catch (err) {
       console.error(err);
       if (err.code === 2) {
-        comment.body = "😢 Auto-rebase unsuccessful."
+        comment.body = `Rebasing _${head}_ on _${base}_ failed. You'll need to manually resolve conflicts.`
       } else if (err.code === 1) {
-        comment.body = "😄 Nothing to do!"
+        comment.body = `This branch is already up-to-date with ${base}.`
       }
 
       return context.github.issues.createComment(comment);
