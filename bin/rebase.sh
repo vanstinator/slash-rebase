@@ -29,18 +29,14 @@ cd $repo
 git config user.name $name
 git config user.email $email
 
-git fetch --all
-
 # First lets make sure we even need to do anything
 hash1=$(git show-ref --heads -s $base)
 hash2=$(git merge-base $base $head)
 [ "${hash1}" = "${hash2}" ] && exit 1 || echo "Rebase is required"
 
-# Checkout and pull latest base changes
-git checkout $base && git reset --hard origin/$base
-
+git checkout $base
 # Checkout and pull head
-git checkout $head && git reset --hard origin/$head
+git checkout $head
 
 # Do the rebase
 if git rebase $base ; then
@@ -52,5 +48,9 @@ else
     git rebase --abort
 fi
 
-# Explictly fail unless otherwise directed. Catch-all for unforseen errors
+# Clean up
+cd ..
+rm -r $repo
+
+# Explictly end with nothing to do
 exit 2

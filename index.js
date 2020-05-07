@@ -47,7 +47,7 @@ module.exports = enqueue(app => {
       if (err.code === 2) {
         comment.body = `Rebasing _${head}_ on _${base}_ failed. You'll need to manually resolve conflicts.`
       } else if (err.code === 1) {
-        comment.body = `This branch is already up-to-date with ${base}.`
+        comment.body = `_${head}_ is already up-to-date with _${base}_.`
       }
 
       return context.github.issues.createComment(comment);
