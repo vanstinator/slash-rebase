@@ -29,8 +29,10 @@ cd $repo
 git config user.name $name
 git config user.email $email
 
-git checkout $base
-git checkout $head
+git fetch --all
+
+git checkout $base && reset --hard origin/$base
+git checkout $head && reset --hard origin/$head
 
 # First lets make sure we even need to do anything
 hash1=$(git show-ref --heads -s $base)
@@ -52,10 +54,6 @@ if [ "${hash1}" != "${hash2}" ] ; then
 else
   exitCode=1
 fi
-
-# Clean up
-cd ..
-rm -r $repo
 
 # Explictly end with nothing to do
 exit $exitCode
