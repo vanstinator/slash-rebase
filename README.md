@@ -1,7 +1,7 @@
 Sourcecode for the GitHub App [slash-rebase](https://github.com/apps/slash-rebase)
 
 ```
-npm run install
+npm install
 npm run dev
 ```
 

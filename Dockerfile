@@ -8,7 +8,7 @@ ENV PORT=$PORT NODE_ENV=$NODE_ENV PATH=/app/node_modules/.bin:$PATH
 EXPOSE $PORT
 
 # git - supporting git operations
-RUN apk update && apk add --no-cache git && apk add --no-cache bash
+RUN apk update && apk add --no-cache git && apk add --no-cache bash && apk add --no-cache python && apk add --no-cache build-base
 
 WORKDIR /app
 COPY package-lock.json package.json ./

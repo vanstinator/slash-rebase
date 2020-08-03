@@ -1,9 +1,11 @@
-const commands = require("probot-commands");
 const got = require("got");
 const util = require('util');
 const enqueue = require('enqueue');
 
 const exec = util.promisify(require('child_process').exec);
+
+const REBASE_LABEL = 'bot:rebase-plz';
+const REBASE_FAILED = 'bot:rebase-failed';
 
 require('dotenv').config()
 
@@ -24,16 +26,20 @@ const gotOpts =  {
 
 module.exports = enqueue(app => {
   console.log("App loaded");
-  commands(app, "rebase", async (context, command) => {
+  app.on('pull_request.labeled', async context => {
+
+    const rebaseLabel = context.payload.pull_request.labels.find(label => label.name === REBASE_LABEL);
+    if (!rebaseLabel) { 
+      return;
+    }
 
     const remote = `https://${process.env.GITHUB_USER}:${process.env.GITHUB_TOKEN}@github.com/${context.payload.repository.full_name}`;
     
     // TODO: HAAACK There's some breaking octokit changes in the pipe. Will be resolved in probot v10 
     const params = context.issue();
-    const comment = { ...params, issue_number: params.number };
-    delete comment.number;
+    const issue = { ...params, issue_number: params.number };
 
-    const response = await got(context.payload.issue.pull_request.url, gotOpts).json();
+    const response = await got(context.payload.pull_request.url, gotOpts).json();
 
     const head = response.head.ref;
     const base = response.base.ref;
@@ -45,14 +51,10 @@ module.exports = enqueue(app => {
     } catch (err) {
       console.error(err);
       if (err.code === 2) {
-        comment.body = `Rebasing _${head}_ on _${base}_ failed. You'll need to manually resolve conflicts.`
-      } else if (err.code === 1) {
-        comment.body = `_${head}_ is already up-to-date with _${base}_.`
+        return context.github.issues.addLabel({ ...issue, name: REBASE_FAILED })
       }
-
-      return context.github.issues.createComment(comment);
     };
 
-    return context.github.reactions.createForIssueComment({ ...comment, comment_id: context.payload.comment.id, content: 'hooray' });
+    return context.github.issues.removeLabel({ ...issue, name: REBASE_LABEL })
   });
 });
