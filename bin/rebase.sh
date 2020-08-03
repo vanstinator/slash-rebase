@@ -31,8 +31,8 @@ git config user.email $email
 
 git fetch --all
 
-git checkout $base && reset --hard origin/$base
-git checkout $head && reset --hard origin/$head
+git checkout $base && git reset --hard origin/$base
+git checkout $head && git reset --hard origin/$head
 
 # First lets make sure we even need to do anything
 hash1=$(git show-ref --heads -s $base)
