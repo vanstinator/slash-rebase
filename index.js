@@ -29,16 +29,19 @@ module.exports = enqueue(app => {
   app.on('pull_request.labeled', async context => {
 
     const rebaseLabel = context.payload.pull_request.labels.find(label => label.name === REBASE_LABEL);
-    if (!rebaseLabel) { 
+    if (!rebaseLabel) {
+      console.log('not a rebase label. bailing out...')
       return;
     }
 
+    console.log(`Preparing to grab ${context.payload.repository.full_name}`)
     const remote = `https://${process.env.GITHUB_USER}:${process.env.GITHUB_TOKEN}@github.com/${context.payload.repository.full_name}`;
     
     // TODO: HAAACK There's some breaking octokit changes in the pipe. Will be resolved in probot v10 
     const params = context.issue();
     const issue = { ...params, issue_number: params.number };
 
+    console.log(`Preparing to get details for ${context.payload.pull_request.url}`)
     const response = await got(context.payload.pull_request.url, gotOpts).json();
 
     const head = response.head.ref;
